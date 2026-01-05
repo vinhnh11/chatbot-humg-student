@@ -1,0 +1,18 @@
+# ===== LangChain core =====
+langchain-core
+langchain-community
+langgraph
+langchain-classic
+
+# ===== Google Gemini / GenAI =====
+google-generativeai
+langchain-google-genai
+
+# ===== Google Auth (khóa version theo yêu cầu) =====
+google-auth==2.43.0
+
+# ===== Document processing =====
+python-docx
+
+# ===== HTTP =====
+requests==2.32.4
