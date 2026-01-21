@@ -50,36 +50,52 @@ class DocumentProcessor:
             doc = DocxDocument(path)
             name = os.path.basename(path)
 
-            # Paragraphs
-            for p in doc.paragraphs:
+            # ===== PARAGRAPH =====
+            for idx, p in enumerate(doc.paragraphs):
                 text_raw = p.text.strip()
-                if text_raw:
-                    text_clean = self.lam_sach_ocr(text_raw)
-                    if text_clean:
-                        docs.append(
-                            Document(
-                                page_content=f"[Word:{name}] {text_clean}",
-                                metadata={"source": name, "type": "paragraph"}
-                            )
-                        )
+                if not text_raw:
+                    continue
 
-            # Tables
-            for i, t in enumerate(doc.tables):
-                rows = []
-                for r in t.rows:
-                    cells = [c.text.strip() for c in r.cells if c.text.strip()]
-                    if cells:
-                        cleaned = [self.lam_sach_ocr(c) for c in cells]
-                        rows.append(" | ".join(cleaned))
+                text_clean = self.lam_sach_ocr(text_raw)
+                if not text_clean:
+                    continue
 
-                if rows:
+                docs.append(
+                    Document(
+                        page_content=f"[Word:{name}][Paragraph {idx + 1}] {text_clean}",
+                        metadata={
+                            "source": name,
+                            "type": "paragraph",
+                            "paragraph_index": idx + 1
+                        }
+                    )
+                )
+
+            # ===== TABLE =====
+            for t_idx, table in enumerate(doc.tables):
+                for r_idx, row in enumerate(table.rows):
+                    cells = []
+                    for c_idx, cell in enumerate(row.cells):
+                        cell_text = self.lam_sach_ocr(cell.text.strip())
+                        if cell_text:
+                            cells.append(cell_text)
+
+                    if not cells:
+                        continue
+
+                    # Row-level document (CHUẨN RAG)
                     docs.append(
                         Document(
-                            page_content=f"[Table {i+1}:{name}]\n" + "\n".join(rows),
+                            page_content=(
+                                    f"[Table:{t_idx + 1}][Row:{r_idx + 1}][{name}]\n"
+                                    + " | ".join(cells)
+                            ),
                             metadata={
                                 "source": name,
-                                "type": "table",
-                                "table_index": i + 1
+                                "type": "table_row",
+                                "table_index": t_idx + 1,
+                                "row_index": r_idx + 1,
+                                "num_columns": len(cells)
                             }
                         )
                     )

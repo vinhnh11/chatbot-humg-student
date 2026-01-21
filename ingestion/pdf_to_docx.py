@@ -4,14 +4,8 @@ import pytesseract
 from docx import Document
 
 from config import PDF_DIR, DOCX_DIR, TESSERACT_CMD
-
-# Cấu hình Tesseract ngay đầu file
 pytesseract.pytesseract.tesseract_cmd = TESSERACT_CMD
-
-# Tạo thư mục nếu chưa có (an toàn)
 os.makedirs(DOCX_DIR, exist_ok=True)
-
-
 def main():
     print("Bắt đầu chuyển đổi PDF → DOCX (chỉ xử lý file chưa có DOCX)...\n")
 

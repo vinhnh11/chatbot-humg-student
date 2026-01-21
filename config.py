@@ -10,7 +10,7 @@ for directory in [DATA_DIR, PDF_DIR, DOCX_DIR]:
     directory.mkdir(parents=True, exist_ok=True)
 
 TESSERACT_CMD = r"F:\tesseract\tesseract.exe"
-GOOGLE_API_KEY = "AIzaSyB57F2IhecMmcuwT0EJf7e2GLncbtDY4Gg"
+GOOGLE_API_KEY = "AIzaSyCEgckyY3POPZxAFShlE_9-cR9DB6sYrww"
 
 # URL
 MAIN_URL = "https://daotaodaihoc.humg.edu.vn/#/quychequydinh"
